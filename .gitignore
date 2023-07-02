@@ -1,3 +1,3 @@
-CMakeLists.txt
+/src/CMakeLists.txt
 /build/*
 /.vscode/*
