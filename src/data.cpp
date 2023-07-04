@@ -10,41 +10,47 @@ DataBase::DataBase(const char* dirName)
 	__dirName = std::string(dirName);
 }
 
+std::vector <dataCipher_> DataBase::get()
+{
+    return __dataCipher;
+}
+
 int DataBase::fetch()
 {
-	char* fileName = NULL;
-	asprintf(&fileName , "%s/length" , __dirName.c_str());
-	FILE* fptr = fopen(fileName , "r");
-	int length = 0;
-	fscanf(fptr , "%d" , &length);
-	for(int i = 0 ; i < length ; i++)
-	{
-		dataCipher_ temp;
-		for(int j = 0 ; j < 40 ; j++)
-		{
-			asprintf(&fileName , "encData/%dN%02d" , i , j);
-			lbcrypto::Serial::DeserializeFromFile(fileName , temp.nameCipher[j / 5][j % 5] , lbcrypto::SerType::BINARY);
-		}
-		for(int j = 0 ; j < 3 ; j++)
-		{
-			asprintf(&fileName , "encData/%dC%02d" , i , j);
-			lbcrypto::Serial::DeserializeFromFile(fileName , temp.caseCipher[j] , lbcrypto::SerType::BINARY);
-		}	
-		for(int j = 0 ; j < 13 ; j++)
-		{
-			asprintf(&fileName , "encData/%dT%02d" , i , j);
-			lbcrypto::Serial::DeserializeFromFile(fileName , temp.timeCipher[j] , lbcrypto::SerType::BINARY);
-		}
-		for(int j = 0 ; j < 8 ; j++)
-		{
-			asprintf(&fileName , "encData/%dL%02d" , i , j);
-			lbcrypto::Serial::DeserializeFromFile(fileName , temp.locationCipher[j] , lbcrypto::SerType::BINARY);
-		}
-		__dataCipher.push_back(temp);
-	}
+    char* fileName = NULL;
+    asprintf(&fileName , "%s/length" , __dirName.c_str());
+    FILE* fptr = fopen(fileName , "r");
+    int length = 0;
+    fscanf(fptr , "%d" , &length);
+    for(int i = 0 ; i < length ; i++)
+    {
+        dataCipher_ temp;
+        for(int j = 0 ; j < 40 ; j++)
+        {
+            asprintf(&fileName , "encData/%dN%02d" , i , j);
+            lbcrypto::Serial::DeserializeFromFile(fileName , temp.nameCipher[j / 5][j % 5] , lbcrypto::SerType::BINARY);
+        }
+        for(int j = 0 ; j < 3 ; j++)
+        {
+            asprintf(&fileName , "encData/%dC%02d" , i , j);
+            lbcrypto::Serial::DeserializeFromFile(fileName , temp.caseCipher[j] , lbcrypto::SerType::BINARY);
+        }
+        for(int j = 0 ; j < 13 ; j++)
+        {
+            asprintf(&fileName , "encData/%dT%02d" , i , j);
+            lbcrypto::Serial::DeserializeFromFile(fileName , temp.timeCipher[j] , lbcrypto::SerType::BINARY);
+        }
+        for(int j = 0 ; j < 8 ; j++)
+        {
+            asprintf(&fileName , "encData/%dL%02d" , i , j);
+            lbcrypto::Serial::DeserializeFromFile(fileName , temp.locationCipher[j] , lbcrypto::SerType::BINARY);
+        }
+        __dataCipher.push_back(temp);
+    }
     return 0;
 }
 
+/*
 int encrypt(lbcrypto::LWEPrivateKey sk , lbcrypto::BinFHEContext cc , const char* fileName , const char* dirName)
 {
 	std::vector <data_> data;
@@ -161,12 +167,9 @@ int encrypt(lbcrypto::LWEPrivateKey sk , lbcrypto::BinFHEContext cc , const char
 
 	return 0;
 }
+*/
 
-std::vector <dataCipher_> DataBase::get()
-{
-	return __dataCipher;
-}
-
+/*
 #if 0
 
 int DataBase::query(lbcrypto::LWEPrivateKey sk , lbcrypto::BinFHEContext cc , const char* dirName)
@@ -280,4 +283,7 @@ int DataBase::query(lbcrypto::LWEPrivateKey sk , lbcrypto::BinFHEContext cc , co
 	return 0;
 }
 
+
+
 #endif
+*/

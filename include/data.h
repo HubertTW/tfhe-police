@@ -30,10 +30,9 @@ class DataBase
 		DataBase(const char* dirName);
 		int fetch();
 		std::vector <dataCipher_> get();
-		//int encrypt(lbcrypto::LWEPrivateKey sk , lbcrypto::BinFHEContext cc , const char* fileName);
-		//int query(lbcrypto::LWEPrivateKey sk , lbcrypto::BinFHEContext cc , const char* dirName);
 };
 
-int encrypt(lbcrypto::LWEPrivateKey sk , lbcrypto::BinFHEContext cc , const char* fileName , const char* dirName);
+int fetch();
+//int encrypt(lbcrypto::LWEPrivateKey sk , lbcrypto::BinFHEContext cc , const char* fileName , const char* dirName);
 
 #endif

@@ -6,7 +6,7 @@
 #include "fetchName.h"
 
 int fetchName(nameCipher* myCipher){
-	system("unzip cts.zip -d cts");
+	//system("unzip cts.zip -d cts");
 	char* filename;
 	bool check = 0;
 	for(int i = 0 ; i < 8 ; i++)

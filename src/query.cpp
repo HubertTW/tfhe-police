@@ -21,7 +21,7 @@ int query(){
 	char* filename; 
 	
 	lbcrypto::LWEPrivateKey secretKey;
-        lbcrypto::BinFHEContext cryptoContext;
+    lbcrypto::BinFHEContext cryptoContext;
 	lbcrypto::Serial::DeserializeFromFile("myKey" , secretKey , lbcrypto::SerType::BINARY);
 	lbcrypto::Serial::DeserializeFromFile("CC" , cryptoContext , lbcrypto::SerType::BINARY);
 	cryptoContext.BTKeyGen(secretKey);
@@ -42,15 +42,13 @@ int query(){
 	int thread = 8;
 	std::vector <std::future <bool>> threads;
 	int blockSize = (num - 1) / thread + 1;
-        lbcrypto::LWECiphertext cmpResult;
-        lbcrypto::LWECiphertext count;
-	
-	
-	
-        puts("start string comparing....");
-        system("mkdir cmpResults");
-        system("mkdir evalData");
-      	
+    lbcrypto::LWECiphertext cmpResult;
+
+
+    puts("start string comparing....");
+    system("mkdir cmpResults");
+    system("mkdir evalData");
+
 
 
 	for(int row = 0 ; row < thread ; row++)

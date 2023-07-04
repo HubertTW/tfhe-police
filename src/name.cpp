@@ -35,8 +35,8 @@ int encryptName(char* name)
 		asprintf(&fname , "cts/temp%d" , i);
 		lbcrypto::Serial::SerializeToFile(fname , DName[i] , lbcrypto::SerType::BINARY);
 	}
-	system("zip -r cts cts");
-	system("rm -f -R cts");
+	//system("zip -r cts cts");
+	//system("rm -f -R cts");
 	std::cout << "Completed.\n";
 	free(pDName);
 	free(fname);

@@ -1,0 +1,57 @@
+Performing C++ SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /home/mutex/tfhe-police/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-FzuA8X
+
+Run Build Command(s):/opt/clion-2023.1.3/bin/ninja/linux/x64/ninja cmTC_cef69 && [1/2] Building CXX object CMakeFiles/cmTC_cef69.dir/src.cxx.o
+FAILED: CMakeFiles/cmTC_cef69.dir/src.cxx.o 
+/usr/bin/c++ -DCMAKE_HAVE_LIBC_PTHREAD  -Wall -Werror -O3  -DOPENFHE_VERSION=1.0.3  -Wno-unused-private-field -Wno-shift-op-parentheses -DMATHBACKEND=4 -fopenmp=libomp -fopenmp=libomp  -fdiagnostics-color=always -o CMakeFiles/cmTC_cef69.dir/src.cxx.o -c /home/mutex/tfhe-police/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-FzuA8X/src.cxx
+c++: error: unrecognized command-line option ‘-fopenmp=libomp’; did you mean ‘-fopenmp-simd’?
+c++: error: unrecognized command-line option ‘-fopenmp=libomp’; did you mean ‘-fopenmp-simd’?
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+#include <pthread.h>
+
+static void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_cancel(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/mutex/tfhe-police/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-3licwT
+
+Run Build Command(s):/opt/clion-2023.1.3/bin/ninja/linux/x64/ninja cmTC_26297 && [1/2] Building CXX object CMakeFiles/cmTC_26297.dir/CheckFunctionExists.cxx.o
+FAILED: CMakeFiles/cmTC_26297.dir/CheckFunctionExists.cxx.o 
+/usr/bin/c++   -Wall -Werror -O3  -DOPENFHE_VERSION=1.0.3  -Wno-unused-private-field -Wno-shift-op-parentheses -DMATHBACKEND=4 -fopenmp=libomp -fopenmp=libomp -DCHECK_FUNCTION_EXISTS=pthread_create -fdiagnostics-color=always -o CMakeFiles/cmTC_26297.dir/CheckFunctionExists.cxx.o -c /home/mutex/tfhe-police/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-3licwT/CheckFunctionExists.cxx
+c++: error: unrecognized command-line option ‘-fopenmp=libomp’; did you mean ‘-fopenmp-simd’?
+c++: error: unrecognized command-line option ‘-fopenmp=libomp’; did you mean ‘-fopenmp-simd’?
+ninja: build stopped: subcommand failed.
+
+
+
+Determining if the function pthread_create exists in the pthread failed with the following output:
+Change Dir: /home/mutex/tfhe-police/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-zaHD3u
+
+Run Build Command(s):/opt/clion-2023.1.3/bin/ninja/linux/x64/ninja cmTC_904dd && [1/2] Building CXX object CMakeFiles/cmTC_904dd.dir/CheckFunctionExists.cxx.o
+FAILED: CMakeFiles/cmTC_904dd.dir/CheckFunctionExists.cxx.o 
+/usr/bin/c++   -Wall -Werror -O3  -DOPENFHE_VERSION=1.0.3  -Wno-unused-private-field -Wno-shift-op-parentheses -DMATHBACKEND=4 -fopenmp=libomp -fopenmp=libomp -DCHECK_FUNCTION_EXISTS=pthread_create -fdiagnostics-color=always -o CMakeFiles/cmTC_904dd.dir/CheckFunctionExists.cxx.o -c /home/mutex/tfhe-police/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-zaHD3u/CheckFunctionExists.cxx
+c++: error: unrecognized command-line option ‘-fopenmp=libomp’; did you mean ‘-fopenmp-simd’?
+c++: error: unrecognized command-line option ‘-fopenmp=libomp’; did you mean ‘-fopenmp-simd’?
+ninja: build stopped: subcommand failed.
+
+
+

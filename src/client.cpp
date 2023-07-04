@@ -2,14 +2,14 @@
 #include "binfhecontext-ser.h"
 #include "encode.h"
 #include "data.h"
+#include "name.h"
 #include <future>
 #include <getopt.h>
 #include <stdlib.h>
 
 void help();
 int keygen();
-int encrypt(const char* dirName);
-int decrypt(const char* dirNname);
+int encrypt(const char*);
 
 int main(int argc , char* argv[])
 {
@@ -18,8 +18,7 @@ int main(int argc , char* argv[])
 	{
 		{"help" , 0 , NULL , 'h'} , 
 		{"keygen" , 0 , NULL , 'k'} , 
-		{"name" , 1 , NULL , 'n'} , 
-		{"decrypt" , 1 , NULL , 'd'} , 
+		{"encryptName" , 1 , NULL , 'n'} ,
         {"encrypt" , 1 , NULL , 'e'}
 	};
 	while((c = getopt_long(argc , argv , "hn:d:ke:" , opt , NULL)) != -1)
@@ -33,10 +32,7 @@ int main(int argc , char* argv[])
 				keygen();
 				break;
 			case 'n':
-				// encrypt(optarg);
-				break;
-			case 'd':
-				decrypt(optarg);
+				encryptName(optarg);
 				break;
             case 'e':
 				encrypt(optarg);
@@ -96,9 +92,11 @@ int encrypt(const char* dirName)
 		std::cout << "Error when open file " << "data.csv" << "\n";
 		return 0;
 	}
-	for(int i = 0 , c = 0 ; (c = fgetc(fptr)) != EOF ; i++)
+    for(int c = 0; (c = fgetc(fptr)) != EOF;)
 	{
 		data_ temp;
+
+        /* padding */
 		for(int j = 0 ; j < 9 ; j++)
 		{
 			temp.name[j] = 0;
@@ -204,7 +202,4 @@ int encrypt(const char* dirName)
 	return 0;
 }
 
-int decrypt(const char* dirNname)
-{
-    return 0;
-}
+
