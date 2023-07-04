@@ -1,4 +1,0 @@
-/home/mutex/tfhe-police/cmake-build-debug/CMakeFiles/server.dir
-/home/mutex/tfhe-police/cmake-build-debug/CMakeFiles/client.dir
-/home/mutex/tfhe-police/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/mutex/tfhe-police/cmake-build-debug/CMakeFiles/rebuild_cache.dir
