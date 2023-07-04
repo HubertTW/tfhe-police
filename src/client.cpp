@@ -86,7 +86,7 @@ int encrypt(const char* dirName)
 	lbcrypto::Serial::DeserializeFromFile("myKey" , sk , lbcrypto::SerType::BINARY);
 	lbcrypto::Serial::DeserializeFromFile("CC" , cc , lbcrypto::SerType::BINARY);
 	std::vector <data_> data;
-	FILE* fptr = fopen("./data.csv" , "r");
+	FILE* fptr = fopen("../testing/data.csv" , "r");
 	if(fptr == nullptr)
 	{
 		std::cout << "Error when open file " << "data.csv" << "\n";

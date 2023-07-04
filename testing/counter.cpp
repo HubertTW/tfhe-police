@@ -135,6 +135,7 @@ void *eval(void *arg) {
 
         pthread_exit(NULL);
 
-        return NULL;
+
     }
+    return NULL;
 }

@@ -107,37 +107,36 @@ int counter(){
     return 0;
 }
 
-void *eval(void *arg)
-{
+void *eval(void *arg) {
 
-    int *data = (int *)arg;
-    printf("thread %d is running\n", data[0] );
+    int *data = (int *) arg;
+    printf("thread %d is running\n", data[0]);
     pthread_mutex_lock(&lock);
 
-    for (int b = 0 ; b < blockSize ; b++){
+    for (int b = 0; b < blockSize; b++) {
 
-        if (b + data[0] * blockSize >= num)
-        {
+        if (b + data[0] * blockSize >= num) {
             break;
         }
-        auto cmpResult = str_comp(tempdata[b +  data[0]* blockSize].nameCipher , qNameCipher , secretKey , cryptoContext);
+        auto cmpResult = str_comp(tempdata[b + data[0] * blockSize].nameCipher, qNameCipher, secretKey, cryptoContext);
 
 
         auto carry = cmpResult;
 
-        for(int bit = 0; bit < 10; bit++) {
+        for (int bit = 0; bit < 10; bit++) {
             auto res = cryptoContext.EvalBinGate(XOR, count[bit], carry);
-            carry    = cryptoContext.EvalBinGate(AND, count[bit], carry);
+            carry = cryptoContext.EvalBinGate(AND, count[bit], carry);
             count[bit] = res;
         }
         pthread_mutex_unlock(&lock);
 
 
-        printf("thread %d finished\n", data[0] );
+        printf("thread %d finished\n", data[0]);
 
         pthread_exit(NULL);
 
-        return NULL;
 
 
     }
+    return NULL;
+}
