@@ -5,5 +5,8 @@
 /cmake-build-debug-hellman/*
 /.idea
 /.cmake
-/build.ninja
+/.ninja*
 /lock
+/cmake_install.cmake
+/.cmake/*
+/CMakeFiles/*

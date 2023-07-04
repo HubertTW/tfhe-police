@@ -1,6 +1,0 @@
-# ninja log v5
-1	139	1688504686106226730	CMakeFiles/client.dir/src/encode.cpp.o	1b6f71dcc4d82ed8
-1	27953	1688504713866229400	CMakeFiles/client.dir/src/data.cpp.o	27bad2c8bd1ee2e9
-1	28144	1688504714062896086	CMakeFiles/client.dir/src/name.cpp.o	c5eddef226e7f599
-0	29785	1688504715702896244	CMakeFiles/client.dir/src/client.cpp.o	b6f5423fdfea9418
-29785	30017	1688504715986229604	client	4e771577e3206bbe
