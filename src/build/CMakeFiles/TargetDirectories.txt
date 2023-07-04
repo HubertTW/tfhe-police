@@ -1,4 +1,0 @@
-/home/mutex/tfhe-police/src/build/CMakeFiles/server.dir
-/home/mutex/tfhe-police/src/build/CMakeFiles/client.dir
-/home/mutex/tfhe-police/src/build/CMakeFiles/edit_cache.dir
-/home/mutex/tfhe-police/src/build/CMakeFiles/rebuild_cache.dir
