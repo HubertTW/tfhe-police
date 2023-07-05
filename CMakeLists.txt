@@ -52,5 +52,6 @@ endif()
 ### EXAMPLE
 add_executable(server src/server.cpp src/query.cpp src/fetchName.cpp src/data.cpp src/encode.cpp src/str_cmp.cpp src/counter.cpp)
 add_executable(client src/client.cpp src/data.cpp src/encode.cpp src/name.cpp)
+add_executable(testing/counterTest.cpp)
 
 target_link_libraries(server PRIVATE pthread)

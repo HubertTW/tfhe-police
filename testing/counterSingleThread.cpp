@@ -13,8 +13,6 @@
 
 using namespace lbcrypto;
 
-void *eval(void *);
-
 lbcrypto::LWECiphertext count[10];
 pthread_t tid[8];
 int numThreads = 8;
@@ -43,8 +41,8 @@ int counter(){
     lbcrypto::Serial::DeserializeFromFile("CC" , cryptoContext , lbcrypto::SerType::BINARY);
     cryptoContext.BTKeyGen(secretKey);
 
-   tempdata = mydb.get();
-   num = tempdata.size();
+    tempdata = mydb.get();
+    num = tempdata.size();
 
     for(int i = 0;i <8 ;i++){
         for(int j = 0;j < 5;j++)
@@ -56,46 +54,17 @@ int counter(){
 
     system("mkdir countResult");
 
-    puts("start multi-processing...");
-
-    int ret;
-    pthread_attr_t attr;
-    size_t stacksize = 102400;
-    ret = pthread_attr_init(&attr);
-    if (ret != 0) {
-        fprintf(stderr, "Error: pthread_attr_init\n");
-    }
-
-    ret = pthread_attr_setstacksize(&attr, stacksize);
-    if (ret != 0) {
-        fprintf(stderr, "Error: pthread_attr_setstacksize\n");
-    }
-
-
-    if (pthread_mutex_init(&lock, NULL) != 0) {
-        printf("\n mutex init has failed\n");
-        return 1;
-    }
-
     int *tinfo = dataIdx;
     int i = 0;
     int error;
     while (i < numThreads) {
-        error = pthread_create(&(tid[i]),
-                               NULL,
-                               &eval, (void*)&tinfo[i]);
-        if (error != 0)
-            printf("\nThread can't be created :[%s]",
-                   strerror(error));
-        i++;
+        eval()
     }
 
     for (int t = 0; t < numThreads; t++){
         pthread_join(tid[t], NULL);
     }
-    pthread_mutex_destroy(&lock);
 
-    pthread_attr_destroy(&attr);
 
     puts("serializing count to file... ");
 
@@ -107,35 +76,31 @@ int counter(){
     return 0;
 }
 
-void *eval(void *arg) {
+void *eval() {
+    for (int i = 0; i < 7; i++) {
 
-    int *data = (int *) arg;
-    printf("thread %d is running\n", data[0]);
-    pthread_mutex_lock(&lock);
+        for (int b = 0; b < blockSize; b++) {
 
-    for (int b = 0; b < blockSize; b++) {
+            if (b + i * blockSize >= num) {
+                break;
+            }
+            auto cmpResult = str_comp(tempdata[b + i * blockSize].nameCipher, qNameCipher, secretKey,
+                                      cryptoContext);
 
-        if (b + data[0] * blockSize >= num) {
-            break;
+
+            auto carry = cmpResult;
+
+            for (int bit = 0; bit < 10; bit++) {
+                auto res = cryptoContext.EvalBinGate(XOR, count[bit], carry);
+                carry = cryptoContext.EvalBinGate(AND, count[bit], carry);
+                count[bit] = res;
+
+            }
+
         }
-        auto cmpResult = str_comp(tempdata[b + data[0] * blockSize].nameCipher, qNameCipher, secretKey, cryptoContext);
-
-
-        auto carry = cmpResult;
-
-        for (int bit = 0; bit < 10; bit++) {
-            auto res = cryptoContext.EvalBinGate(XOR, count[bit], carry);
-            carry = cryptoContext.EvalBinGate(AND, count[bit], carry);
-            count[bit] = res;
-        }
-        pthread_mutex_unlock(&lock);
-
-
-        printf("thread %d finished\n", data[0]);
-
-        pthread_exit(NULL);
-
 
     }
+
     return NULL;
+
 }

@@ -11,7 +11,7 @@ startDate = mktime((2008 , 1 , 1 , 0 , 0 , 0 , 0 , 0 , 0))
 endDate = mktime((2023 , 12 , 31 , 23 , 59 , 59 , 0 , 0 , 0))
 
 with open("data.csv" , "w") as f:
-	for i in range(1000):
+	for i in range(50):
 		dt = localtime(randint(startDate , endDate))
 		n = names[randint(0 , len(names) - 1)]
 		c = str(randint(0 , 7))

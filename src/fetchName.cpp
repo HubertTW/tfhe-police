@@ -21,7 +21,9 @@ int fetchName(nameCipher* myCipher){
 			}
 		}
 	}
-	free(filename);
+
+    puts("fetchName success");
+    free(filename);
 	//system("rm -f -R cts");
 	return 0;
 }

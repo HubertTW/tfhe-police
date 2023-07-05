@@ -34,10 +34,9 @@ int counter(){
 
     DataBase mydb("encData");
     nameCipher mycipher;
-    //system("unzip encData -d encData");
     mydb.fetch();
     fetchName(&mycipher);
-    char* filename;
+
 
     lbcrypto::Serial::DeserializeFromFile("myKey" , secretKey , lbcrypto::SerType::BINARY);
     lbcrypto::Serial::DeserializeFromFile("CC" , cryptoContext , lbcrypto::SerType::BINARY);
@@ -52,6 +51,11 @@ int counter(){
     }
 
     blockSize = (num - 1) / numThreads + 1;
+
+    /* initialize the count as 0 */
+    for (int i = 0;i < 10; i++ ){
+        count[i] = cryptoContext.Encrypt(secretKey, 0);
+    }
 
 
     system("mkdir countResult");
@@ -99,6 +103,7 @@ int counter(){
 
     puts("serializing count to file... ");
 
+    char* filename;
     for (int bit = 0; bit < 10; bit++) {
         asprintf(&filename, "countResult/%d-count", bit);
         lbcrypto::Serial::SerializeToFile(filename, count[bit], lbcrypto::SerType::BINARY);
@@ -111,7 +116,7 @@ void *eval(void *arg) {
 
     int *data = (int *) arg;
     printf("thread %d is running\n", data[0]);
-    pthread_mutex_lock(&lock);
+
 
     for (int b = 0; b < blockSize; b++) {
 
@@ -120,9 +125,9 @@ void *eval(void *arg) {
         }
         auto cmpResult = str_comp(tempdata[b + data[0] * blockSize].nameCipher, qNameCipher, secretKey, cryptoContext);
 
+        pthread_mutex_lock(&lock);
 
         auto carry = cmpResult;
-
         for (int bit = 0; bit < 10; bit++) {
             auto res = cryptoContext.EvalBinGate(XOR, count[bit], carry);
             carry = cryptoContext.EvalBinGate(AND, count[bit], carry);

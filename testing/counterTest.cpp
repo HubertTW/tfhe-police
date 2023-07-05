@@ -7,7 +7,7 @@ int main() {
 
     auto cc = BinFHEContext();
 
-    cc.GenerateBinFHEContext(TOY);
+    cc.GenerateBinFHEContext(STD128);
 
     // Generate the secret key
     auto sk = cc.KeyGen();
@@ -19,23 +19,29 @@ int main() {
 
     std::cout << "Completed the key generation." << std::endl;
 
-    lbcrypto::LWECiphertext count[8]; /* cmpResult */
+    lbcrypto::LWECiphertext count[8];/* cmpResult */
+    for (int i = 0;i < 8; i++ ){
+        count[i] = cc.Encrypt(sk, 0);
+    }
 
-    int data[8] = {1,0,0,0,1,1,1,1};
+    bool data[8] = {1,0,0,0,0,1,1,1};
     lbcrypto::LWECiphertext cmpRes[8];
 
-    for (int i = 0; i < 8; i++ ){
+    for (int i = 0; i < 8; i++ ) {
         cmpRes[i] = cc.Encrypt(sk, data[i]);
-        
+
+
         printf("count %d", i);
-        auto carry  = cmpRes[i] ;
+        auto carry = cmpRes[i];
         for (int lsb = 0; lsb < 8; lsb++) {
-            auto res = cc.EvalBinGate(XOR, count[lsb], carry); /* 0:true,1:false */
-            carry    = cc.EvalBinGate(AND, count[lsb], carry); /* once the temp = false, it's always false */
-            count[lsb]  = res;
+            auto res = cc.EvalBinGate(XOR, count[lsb], carry);
+            carry = cc.EvalBinGate(AND, count[lsb], carry); /* once the temp = false, it's always false */
+            count[lsb] = res;
         }
 
     }
+
+
 
         puts("eval completed");
 

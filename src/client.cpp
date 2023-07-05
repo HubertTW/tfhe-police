@@ -10,24 +10,23 @@
 void help();
 int keygen();
 int encrypt(const char*);
+void decryptCount();
 
 int main(int argc , char* argv[])
 {
 	int c = 0;
 	option opt[] = 
 	{
-		{"help" , 0 , NULL , 'h'} , 
 		{"keygen" , 0 , NULL , 'k'} , 
 		{"encryptName" , 1 , NULL , 'n'} ,
-        {"encrypt" , 1 , NULL , 'e'}
+        {"encrypt" , 1 , NULL , 'e'},
+        {"decryptCount" , 1 , NULL , 'd'}
 	};
-	while((c = getopt_long(argc , argv , "hn:d:ke:" , opt , NULL)) != -1)
+	while((c = getopt_long(argc , argv , "hn:dke:" , opt , NULL)) != -1)
 	{
 		switch(c)
 		{
-			case 'h':
-				help();
-				break;
+
 			case 'k':
 				keygen();
 				break;
@@ -37,6 +36,9 @@ int main(int argc , char* argv[])
             case 'e':
 				encrypt(optarg);
 				break;
+            case 'd':
+                decryptCount();
+                break;
 			case '?':
 				std::cout << "unknown argument.\n";
 				break;
@@ -47,22 +49,42 @@ int main(int argc , char* argv[])
 	return 0;
 }
 
-void help()
-{
-	std::cout << "Usage: ./cleint [options] ...\n";
-	std::cout << "Options:\n";
-	std::cout << "\t-h, --help\t\tdisplay this help and exit.\n";
-	std::cout << "\t-k, --keygen\t\tgenerate a key and save in \"./myKey\".\n";
-	std::cout << "\t-n, --name NAME\t\tgenerate a file that can query by NAME(at most 8 characters). It also generate a file for decryption named \"CC\".\n";
-	std::cout << "\t-d, --decrypt FILENAME\tdecrypt the result which is named FILENAME by \"./myKey\" and show the result.\n";
-	return;
+
+
+void decryptCount() {
+
+
+    lbcrypto::LWEPrivateKey sk;
+    lbcrypto::BinFHEContext cc;
+    lbcrypto::Serial::DeserializeFromFile("myKey" , sk , lbcrypto::SerType::BINARY);
+    lbcrypto::Serial::DeserializeFromFile("CC" , cc , lbcrypto::SerType::BINARY);
+    lbcrypto::LWECiphertext countCipher[10];
+    lbcrypto::LWEPlaintext count[10];
+    int sum   = 0;
+    int power = 1; /* 2^0 */
+    char* filename;
+
+    for (int bit = 0; bit < 10 ; bit++) {
+
+        asprintf(&filename, "countResult/%d-count", bit);
+        lbcrypto::Serial::DeserializeFromFile(filename, countCipher[bit], lbcrypto::SerType::BINARY);
+
+        cc.Decrypt(sk, countCipher[bit], &count[bit]);
+        sum += (power * count[bit]);
+        power = power * 2;
+
+    }
+
+    std::cout << "the count result is : " << sum << std::endl;
+
+
 }
 
 int keygen()
 {
 	std::cout << "Start generating the key...\n";
 	auto CryptoContext = lbcrypto::BinFHEContext();
-	CryptoContext.GenerateBinFHEContext(lbcrypto::MEDIUM);
+	CryptoContext.GenerateBinFHEContext(lbcrypto::TOY);
 	auto SecretKey = CryptoContext.KeyGen();
 	std::cout << "Start saving the key...\n";
 	if(lbcrypto::Serial::SerializeToFile(std::string("myKey") , SecretKey , lbcrypto::SerType::BINARY) == 0)
