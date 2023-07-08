@@ -1,8 +1,5 @@
 /build/*
 /.vscode/*
-/cmake-build-debug/*
-/cmake-build-debug-clang/*
-/cmake-build-debug-hellman/*
 /.idea
 /.cmake
 /.ninja*
