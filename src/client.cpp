@@ -64,18 +64,22 @@ void decryptCount() {
     int power = 1; /* 2^0 */
     char* filename;
 
+
+    puts("start decrypting...");
+    puts("the binary result is: ");
     for (int bit = 0; bit < 10 ; bit++) {
 
         asprintf(&filename, "countResult/%d-count", bit);
         lbcrypto::Serial::DeserializeFromFile(filename, countCipher[bit], lbcrypto::SerType::BINARY);
 
         cc.Decrypt(sk, countCipher[bit], &count[bit]);
+        std::cout << count[bit] <<"";
         sum += (power * count[bit]);
         power = power * 2;
 
     }
 
-    std::cout << "the count result is : " << sum << std::endl;
+    std::cout << "\nthe count result (decimal) is : " << sum << std::endl;
 
 
 }
@@ -108,7 +112,7 @@ int encrypt(const char* dirName)
 	lbcrypto::Serial::DeserializeFromFile("myKey" , sk , lbcrypto::SerType::BINARY);
 	lbcrypto::Serial::DeserializeFromFile("CC" , cc , lbcrypto::SerType::BINARY);
 	std::vector <data_> data;
-	FILE* fptr = fopen("../testing/data.csv" , "r");
+	FILE* fptr = fopen("../../testing/data.csv" , "r");
 	if(fptr == nullptr)
 	{
 		std::cout << "Error when open file " << "data.csv" << "\n";

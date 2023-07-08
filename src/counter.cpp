@@ -17,13 +17,13 @@ void *eval(void *);
 
 lbcrypto::LWECiphertext count[10];
 pthread_t tid[8];
+pthread_mutex_t lock;
 int numThreads = 8;
 int dataIdx[8] = {0,1,2,3,4,5,6,7};
 int blockSize;
 int num;
-std::vector <dataCipher_> tempdata;
-pthread_mutex_t lock;
 
+std::vector <dataCipher_> tempdata;
 lbcrypto::LWEPrivateKey secretKey;
 lbcrypto::BinFHEContext cryptoContext;
 lbcrypto::LWECiphertext qNameCipher[8][5];
@@ -62,6 +62,7 @@ int counter(){
 
     puts("start multi-processing...");
 
+/*
     int ret;
     pthread_attr_t attr;
     size_t stacksize = 102400;
@@ -75,6 +76,7 @@ int counter(){
         fprintf(stderr, "Error: pthread_attr_setstacksize\n");
     }
 
+*/
 
     if (pthread_mutex_init(&lock, NULL) != 0) {
         printf("\n mutex init has failed\n");
@@ -94,12 +96,18 @@ int counter(){
         i++;
     }
 
-    for (int t = 0; t < numThreads; t++){
-        pthread_join(tid[t], NULL);
+
+    for (int t = 0; t < numThreads; t++) {
+        if (pthread_join(tid[t], NULL) != 0) {
+            perror("pthread_join() error");
+            exit(3);
+
+        }
     }
     pthread_mutex_destroy(&lock);
 
-    pthread_attr_destroy(&attr);
+
+   // pthread_attr_destroy(&attr);
 
     puts("serializing count to file... ");
 
@@ -115,8 +123,8 @@ int counter(){
 void *eval(void *arg) {
 
     int *data = (int *) arg;
-    printf("thread %d is running\n", data[0]);
 
+    printf("thread %d is running\n", data[0]);
 
     for (int b = 0; b < blockSize; b++) {
 
@@ -125,8 +133,8 @@ void *eval(void *arg) {
         }
         auto cmpResult = str_comp(tempdata[b + data[0] * blockSize].nameCipher, qNameCipher, secretKey, cryptoContext);
 
-        pthread_mutex_lock(&lock);
 
+        pthread_mutex_lock(&lock);
         auto carry = cmpResult;
         for (int bit = 0; bit < 10; bit++) {
             auto res = cryptoContext.EvalBinGate(XOR, count[bit], carry);
@@ -138,7 +146,8 @@ void *eval(void *arg) {
 
         printf("thread %d finished\n", data[0]);
 
-        pthread_exit(NULL);
+        /* this is fault ! */
+        //pthread_exit(NULL);
 
 
 

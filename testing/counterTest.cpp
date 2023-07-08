@@ -45,8 +45,6 @@ int main() {
 
         puts("eval completed");
 
-    
-
         /* client  only */
 
         LWEPlaintext result[8];
